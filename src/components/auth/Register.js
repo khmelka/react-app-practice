@@ -1,7 +1,11 @@
 import React, { Fragment, useState } from 'react'
-import axios from 'axios'
+import {Link} from 'react-router-dom'
+import { connect } from 'react-redux'
+import {setAlert} from '../../actions/alert'
+import PropTypes from 'prop-types'
 
-export const Register = () => {
+
+const Register = ({ setAlert }) => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -16,31 +20,14 @@ export const Register = () => {
     const onSubmit = async (event) => {
         event.preventDefault()
         if(password !== password2) {
-            console.log('Passwords no not match')
+            setAlert('Passwords no not match', 'danger')
         }
         else {
-            const newUser = {
-                name,
-                email,
-                password
-            }
-            try {
-                const config = {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
+            console.log("SUCCESS")
+      }
+  }
 
-                const body = JSON.stringify(newUser)
-
-                const res = await axios.post('https://localhost:5000/api/users', body, config)
-                console.log("token", res.data)
-            } catch (error) {
-                console.error(error)
-            }
-        }
-    }
-
+    
     return (
         <Fragment>
             <h1 className="large text-primary">Sign Up</h1>
@@ -92,9 +79,14 @@ export const Register = () => {
                     <input type="submit" className="btn btn-primary" value="Register" />
                 </form>
             <p className="my-1">
-                Already have an account? <a href="login.html">Sign In</a>
+                Already have an account? <Link to='/login'>Login</Link>
             </p>
         </Fragment>
     )
 }
-export default Register
+
+Register.propTypes = {
+    setAlert: PropTypes.func.isRequired
+}
+
+export default connect(null, {setAlert})(Register)
